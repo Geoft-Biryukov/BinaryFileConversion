@@ -14,13 +14,15 @@ namespace BinaryFileToHexConvertion
     public partial class MainForm : Form, IMainView
     {
         private readonly MainPresenter presenter;
+        private readonly ReadBytesOptions options = new ReadBytesOptions();
 
         public MainForm()
         {
             InitializeComponent();
-            this.presenter = new MainPresenter(this);
+            this.presenter = new MainPresenter(this, options);
 
             Disposed += MainForm_Disposed;
+            viewProperties.SelectedObject = options;
         }
 
         private void MainForm_Disposed(object sender, EventArgs e)
@@ -45,24 +47,21 @@ namespace BinaryFileToHexConvertion
         }
 
         public void SetFileName(string name)
-        {
-            fileNameTextBox.Text = name;
+        {         
+            options.FileName = name;
+            viewProperties.Refresh();
         }
 
         public void SetFileLength(long length)
-        {
-            fileSizeTextBox.Text = length.ToString("#,#", CultureInfo.InvariantCulture);
+        {           
+            options.FileSize = length.ToString("#,#", CultureInfo.InvariantCulture);
+            viewProperties.Refresh();
         }
-
-        public void SetMaxBytes(long length)
-        {
-            bytesToReadNumericUpDown.Maximum = length;
-            offsetNumericUpDown.Maximum = length;
-        }
+      
 
         private void readButton_Click(object sender, EventArgs e)
         {
-            presenter.ReadBytes((long)offsetNumericUpDown.Value, (long)bytesToReadNumericUpDown.Value);
+            presenter.ReadBytes();
         }
 
         public void SetText(string text)
@@ -73,6 +72,16 @@ namespace BinaryFileToHexConvertion
         public void ShowWarningMessage(string message)
         {
             MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        public void SetMaxBytes(long length)
+        {
+            options.SetMaxBytes(length);
+        }
+
+        private void viewProperties_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

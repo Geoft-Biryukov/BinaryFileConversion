@@ -10,12 +10,14 @@ namespace BinaryFileToHexConvertion
     internal class MainPresenter : IDisposable
     {
         private readonly IMainView view;
+        private readonly ReadBytesOptions options;
         private FileStream processingFile = null;
         private byte[] readBytes = null;
 
-        public MainPresenter(IMainView view)
+        public MainPresenter(IMainView view, ReadBytesOptions options)
         {
             this.view = view ?? throw new ArgumentNullException(nameof(view));
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
         }      
 
         internal void OpenFile()
@@ -33,29 +35,41 @@ namespace BinaryFileToHexConvertion
             view.SetMaxBytes(processingFile.Length);
         }
 
-        internal void ReadBytes(long offset, long count)
+        internal void ReadBytes()
         {
             if (processingFile == null)
+            {
                 view.ShowWarningMessage("Please choose file!");
+                return;
+            }
+            var offset = options.Offset;
+            var count = options.BytesToRead;            
 
             readBytes = new byte[count];
             processingFile.Seek(offset, SeekOrigin.Begin);
             processingFile.Read(readBytes, 0, (int)count);
 
-            var text = GetFormatedText(readBytes);
+            var text = GetFormatedText(readBytes, options.BytesInRow);
             
             view.SetText(text);
         }
 
-        private static string GetFormatedText(byte[] readBytes)
+        
+        private static string GetFormatedText(byte[] readBytes, int countInRow)
         {
             var builder = new StringBuilder();
+            int itemsCounter = 0;            
             foreach (var item in readBytes)
             {
                 builder.AppendFormat("0x{0:x2}", item);
                 builder.Append(", ");
+
+                if(++itemsCounter % countInRow == 0)
+                {
+                    builder.Append(Environment.NewLine);                    
+                }
             }
-            builder.Remove(builder.Length - 3, 2);
+            builder.Remove(builder.Length - 2, 2);
 
             return builder.ToString();
         }
@@ -63,8 +77,6 @@ namespace BinaryFileToHexConvertion
         public void Dispose()
         {
             processingFile?.Close();
-        }
-
-       
+        }        
     }
 }
