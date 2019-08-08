@@ -76,7 +76,6 @@
             this.viewProperties.Name = "viewProperties";
             this.viewProperties.Size = new System.Drawing.Size(257, 528);
             this.viewProperties.TabIndex = 4;
-            this.viewProperties.Click += new System.EventHandler(this.viewProperties_Click);
             // 
             // hexTextBox
             // 

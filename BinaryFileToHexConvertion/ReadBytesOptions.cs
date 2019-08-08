@@ -15,6 +15,7 @@ namespace BinaryFileToHexConvertion
         private string fileName = string.Empty;
         [Category(fileInfoCategory)]
         [ReadOnly(true)]
+        [DisplayName("Name of file")]
         public string FileName
         {
             get => fileName;
@@ -27,6 +28,7 @@ namespace BinaryFileToHexConvertion
         private string fileSize = "0";
         [Category(fileInfoCategory)]
         [ReadOnly(true)]
+        [DisplayName("Size of file")]
         public string FileSize
         {
             get => fileSize;
@@ -43,6 +45,7 @@ namespace BinaryFileToHexConvertion
 
         private long offset = 0;
         [Category(readCategory)]
+        [DisplayName("Offset from begin")]
         public long Offset
         {
             get => offset;
@@ -54,6 +57,7 @@ namespace BinaryFileToHexConvertion
 
         private long bytesToRead = 1024;
         [Category(readCategory)]
+        [DisplayName("Bytes to read")]
         public long BytesToRead
         {
             get => bytesToRead;
@@ -70,6 +74,7 @@ namespace BinaryFileToHexConvertion
 
         private int bytesInRow = 20;
         [Category(viewCategory)]
+        [DisplayName("Bytes in row")]
         public int BytesInRow
         {
             get => bytesInRow;

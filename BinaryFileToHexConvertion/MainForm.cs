@@ -78,10 +78,5 @@ namespace BinaryFileToHexConvertion
         {
             options.SetMaxBytes(length);
         }
-
-        private void viewProperties_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
